@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+      <link rel="stylesheet" href="static/styles/card-style.css">
+   </head>
+   <body>
+      {% include 'main_page/navbars/coach-navbar.html' %}
+      <div class="container mt-4">
+         <h1 class="mb-4">My Gyms</h1>
+         <small style="color: red;">{{message[0]}}</small>
+         <!-- Nav tabs -->
+         <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+               <a class="nav-link active" id="cards-tab" data-toggle="tab" href="#cards" role="tab" aria-controls="cards" aria-selected="true">Gyms</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" id="form-tab" data-toggle="tab" href="#form" role="tab" aria-controls="form" aria-selected="false">Add Gym</a>
+            </li>
+         </ul>
+         <!-- Tab panes -->
+         <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="cards" role="tabpanel" aria-labelledby="cards-tab">
+               <div class="row">
+                  {% for gym in gyms %}
+                    <div class="col-md-4">
+                      <div class="card-wrapper">
+                        <div class="card">
+                          <img src="data:image/png;base64,{{gym['picture']}}" class="card-img-top" alt="Gym Image">
+                          <div class="card-content">
+                            <h5 class="card-title">{{gym['name']}}</h5>
+                            <p class="card-text">{{gym['address']}}</p>
+                          </div>
+                          <div class="card-body">
+                              <!--MORE INFO TOGGLE-->
+                              <button type="button" class="btn btn-primary" data-container="body" data-toggle="popover" data-placement="bottom" data-content="In here there should be more info on the gym.">More Info</button>
+                              <button type="button" class="btn btn-danger" id="delete-gym-btn-{{gym['_id']['$oid']}}" data-toggle="modal" data-target="#delete-gym-modal-{{gym['_id']['$oid']}}">Delete Gym</button>
+
+                              <!-- Modal -->
+                              <div class="modal fade" id="delete-gym-modal-{{gym['_id']['$oid']}}" tabindex="-1" aria-labelledby="delete-gym-modal-label" aria-hidden="true">
+                                <div class="modal-dialog">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="delete-gym-modal-label">Delete Gym?</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                      Are you sure you want to delete this gym?
+                                    </div>
+                                    <div class="modal-footer">
+                              
+                                       <form method="POST" action="/delete-gym" id="delete-gym-form-{{gym['_id']['$oid']}}">
+                                          <input type="hidden" name="name" value="{{gym['name']}}">
+                                       </form>
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                      <input type="submit" class="btn btn-danger" form="delete-gym-form-{{gym['_id']['$oid']}}" value="Yes">
+                              
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!---->
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>                             
+
+            </div>
+            <div class="tab-pane fade" id="form" role="tabpanel" aria-labelledby="form-tab">
+              <form method="POST" action="/my-gyms" enctype="multipart/form-data">
+                <!--GYM FORM-->
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input type="text" class="form-control" id="name" placeholder="Enter your name" name="name" required minlength="3" maxlength="50">
+                </div>
+                
+                <div class="form-group">
+                  <label for="phone">Phone number</label>
+                  <input type="tel" class="form-control" id="phone" placeholder="Enter your phone number" name="phone" required>
+                </div>
+                
+                <div class="form-group">
+                  <label for="address">Address</label>
+                  <input type="text" class="form-control" id="address" placeholder="Enter your address" name="address" required>
+                </div>
+                
+                <div class="form-group">
+                  <label for="language">Language</label>
+                  <select class="form-control" id="language" name="language" required>
+                    <option selected disabled>Language</option>
+                    <option value="French">French</option>
+                    <option value="English">English</option>
+                  </select>
+                </div>
+                
+                <div class="form-group">
+                  <label for="rules">Gym Rules</label>
+                  <textarea class="form-control" id="rules" rows="3" name="rules" placeholder="(ex: Use 16oz gloves, Mandatory Headgear and mouthpiece, etc)"></textarea>
+                </div>
+                
+                <div class="form-group">
+                  <label for="picture">Picture</label>
+                  <input type="file" class="form-control-file" id="picture"required accept="image/*" name="picture">
+                </div>
+                <input type="submit" class="btn btn-primary" value="Submit">
+              </form>
+            </div>
+         </div>
+      </div>
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+      <script>
+         $(function () {
+         $('[data-toggle="popover"]').popover()
+         })
+      </script>
+   </body>
+</html>

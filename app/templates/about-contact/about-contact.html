@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Signup Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+
+    {% if role == None %}
+        {% include 'main_page/navbars/nosession-navbar.html' %}
+    {% elif role == "Boxer"%}
+        {% include 'main_page/navbars/boxer-navbar.html' %}
+    {% elif role == "Coach"%}
+        {% include 'main_page/navbars/coach-navbar.html' %}
+    {%endif%}
+
+    <section class="bg-light py-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <h1 class="display-4">About SparFinder</h1>
+              <p class="lead">
+                Welcome to our web app for boxers and coaches looking for cross gym sparring opportunities! 
+                Our platform is designed to connect boxers with gyms that offer sparring sessions with athletes from other training facilities.
+                <hr>
+                Coaches can create events and manage their gym's information on our platform, including gym location, hours of operation, 
+                and contact information. Boxers can search for sparring events based on their location, preferred date and time, and skill level.
+                <hr>
+                Our user-friendly interface makes it easy for both coaches and boxers to navigate and find the information they need. 
+                Coaches can also communicate with boxers who have expressed interest in their events to confirm details and answer any questions.
+                <hr>
+                We prioritize safety and sportsmanship in all of our events, and we encourage all participants to 
+                respect each other's skill levels and abilities. We believe that cross gym sparring is an excellent way for boxers to improve their 
+                skills and gain experience, and we are committed to providing a platform that makes it easy to find and participate in these events.
+                <hr>
+                Join our community today and take your boxing skills to the next level!
+              </p>
+              <hr>
+              <p>
+                I created this web app to make it easier for boxers and coaches to find cross gym sparring opportunities and connect with other 
+                athletes and training facilities since I was having trouble finding sparring partners in other gyms. As many people using this 
+                website, I am a fellow amateur boxer and software dev.
+              </p>
+            </div>
+            <div class="col-md-6">
+              <img src="static/img/about-img.png" class="img-fluid" alt="Placeholder">
+            </div>
+          </div>
+        </div>
+      </section>
+    
+      <section class="py-5">
+        <div class="container">
+          <h2>Contact Me</h2>
+          <form>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Email address</label>
+              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">Subject</label>
+              <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Subject">
+            </div>
+            <div class="form-group">
+              <label for="exampleFormControlTextarea1">Message</label>
+              <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </section>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

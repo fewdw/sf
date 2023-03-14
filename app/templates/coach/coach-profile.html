@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+      <link rel="stylesheet" href="static/styles/profile-pic.css">
+      <link rel="stylesheet" href="static/styles/profile-pic.css">
+   </head>
+   <body>
+      {% include 'main_page/navbars/coach-navbar.html' %}
+      <div class="container mt-5">
+         <div class="row">
+            <div class="col-md-6 offset-md-3 text-center">
+               <img src="data:image/png;base64,{{profile['picture']}}" class="profile-pic mb-3" alt="Boxer Picture">
+           
+               <h2>{{profile['username']}}</h2>
+               <hr>
+               <h5>Profile Information</h5>
+               <p>Full Name: {{profile['fullname']}}</p>
+               <p>Years of experience: {{profile['yearsofexperience']}}</p>
+               <p>Language: {{profile['language']}}</p>
+               <button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#editModal">Edit</button>
+               <hr>
+               <h5>Events Hosted</h5>
+               {% for event in profile['events'] %}
+               <p>{{ event }}</p>
+               {% endfor %}
+               <!-- Modal -->
+               <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                     <div class="modal-content">
+                        <div class="modal-header">
+                           <h5 class="modal-title" id="editModalLabel">Edit Profile</h5>
+                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                           <span aria-hidden="true">&times;</span>
+                           </button>
+                        </div>
+                        <div class="modal-body">
+                           <!---->
+                           <div class="container mt-5">
+                              <div class="row">
+                                 <div class="col-md-6 offset-md-3">
+                                    <form method="POST" action="/coach-profile" id="edit-boxer-form" enctype="multipart/form-data">
+                                       <div class="form-group">
+                                          <label for="fullname">Full Name</label>
+                                          <input type="text" class="form-control" id="fullname" placeholder="Enter Full Name" name="fullname" value="{{profile['fullname']}}">
+                                       </div>
+                                       <div class="form-group">
+                                          <label for="experience">Years of Experience</label>
+                                          <input type="number" class="form-control" id="experience" placeholder="Enter Years of Experience" name="years_of_experience" value="{{profile['yearsofexperience']}}">
+                                       </div>
+                                       <div class="form-group">
+                                          <label for="language">Language</label>
+                                          <select class="form-control" id="language" name="language">
+                                                {% if profile['language'] == 'french' %}
+                                                  <option value="french">French</option>
+                                                  <option value="english">English</option>
+                                                {% else %}
+                                                  <option value="english">English</option>
+                                                  <option value="french">French</option>
+                                                {% endif %}
+                                              </select>
+                                       </div>
+                                       <div class="form-group">
+                                          <label for="picture">Picture</label>
+                                          <img src="data:image/png;base64,{{profile['picture']}}" class="mini-profile-pic mb-3" alt="Boxer Picture">
+                                          <input type="hidden" value="{{profile['picture']}}" name="picture_base64">
+                                          <input type="file" class="form-control-file" id="picture" accept="image/*" name="picture">
+                                       </div>
+                                    </form>
+                                 </div>
+                              </div>
+                           </div>
+                           <!---->
+                        </div>
+                        <div class="modal-footer">
+                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                           <button type="submit" class="btn btn-primary" form="edit-boxer-form">Save Changes</button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+   </body>
+</html>

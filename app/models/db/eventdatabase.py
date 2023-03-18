@@ -2,6 +2,7 @@ from pymongo import MongoClient
 import certifi
 import json
 from bson import json_util
+from datetime import datetime
 import os
 ca = certifi.where()
 
@@ -32,3 +33,8 @@ class EventDatabase:
         events = self.event_collection.find({'coach':username})
         return json.loads(json_util.dumps(events)) 
     
+    def get_all_future_events(self):
+        current_time = datetime.now().strftime("%Y-%m-%dT%H:%M")
+        query = {"date": {"$gt": current_time}}
+        events = self.event_collection.find(query)
+        return json.loads(json_util.dumps(events))

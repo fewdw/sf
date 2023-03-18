@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+
+{% if role == None %}
+    {% include 'main_page/navbars/nosession-navbar.html' %}
+{% elif role == "Boxer"%}
+    {% include 'main_page/navbars/boxer-navbar.html' %}
+{% elif role == "Coach"%}
+    {% include 'main_page/navbars/coach-navbar.html' %}
+{%endif%}
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3" style="padding-top: 10px;">
+        <form>
+          <div class="form-group">
+            <label for="filter">Filter:</label>
+            <input type="text" class="form-control" id="filter">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+      <div class="col-md-9">
+
+        <div class="row">
+          {%for event in events%}
+            <div class="col-md-3" style="padding-top: 10px;">
+              <div class="card">
+                <img src="data:image/png;base64,{{event['picture']}}" class="card-img-top" alt="Gym Image">
+                <div class="card-body">
+                  <h5 class="card-title">{{event['gym']}}</h5>
+                  <p class="card-subtitle mb-2 text-muted">{{event['address']}}</p>
+                  <p class="card-text">{{event['readable_date']}}</p>
+                  <p class="card-text">{{event['rules']}}</p>
+                  <p class="card-text">People mostly speak {{event['language']}}</p>
+                  <p class="card-text">
+
+                  {% if event['max_attendees'] > 0 %}
+                      {% set percentage = (event['boxers']|length / event['max_attendees']) * 100 %}
+                      {% set aria_valuenow = event['boxers']|length %}
+                      {% set aria_valuemin = 0 %}
+                      {% set aria_valuemax = event['max_attendees'] %}
+                  {% else %}
+                      {% set percentage = 0 %}
+                      {% set aria_valuenow = 0 %}
+                      {% set aria_valuemin = 0 %}
+                      {% set aria_valuemax = 0 %}
+                  {% endif %}
+                  <div class="progress">
+                      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{ aria_valuenow }}" aria-valuemin="{{ aria_valuemin }}" aria-valuemax="{{ aria_valuemax }}" style="width: {{ percentage }}%">
+                          {{ percentage }}%
+                      </div>
+                  </div>
+                  </p>
+                  <div>
+                    <button class="btn btn-success">Join this event</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% if loop.index % 4 == 0 %}
+              </div>
+              <div class="row">
+            {% endif %}
+          {%endfor%}
+    
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

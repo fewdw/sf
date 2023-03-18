@@ -94,3 +94,13 @@ def add_event():
 
     # redirect to events
     return redirect('/my-events')
+
+
+@app.route('/events')
+def view_events():
+
+    # get all events
+    eventdatabase = EventDatabase()
+    events = eventdatabase.get_all_future_events()
+
+    return render_template('events/events.html',role=session.get('role'), events=events)

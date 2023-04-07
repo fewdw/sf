@@ -103,4 +103,13 @@ def view_events():
     eventdatabase = EventDatabase()
     events = eventdatabase.get_all_future_events()
 
-    return render_template('events/events.html',role=session.get('role'), events=events)
+    return render_template('events/events.html',role=session.get('role'), events=events, username=session.get('username'))
+
+@app.route('/events/boxer-join-event')
+def boxer_join_event_route():
+
+    # get event id
+    event_id = request.args.get('event_id')
+    return event_id
+    # add boxer to the event waiting list
+    # redirect

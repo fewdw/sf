@@ -59,7 +59,41 @@
                   </div>
                   </p>
                   <div>
-                    <button class="btn btn-success">Join this event</button>
+                    {% if role == "Boxer"%}
+                    <button class="btn btn-success" data-toggle="modal" data-target="#joinEventModal">Join this event</button>
+
+                    <div class="modal fade" id="joinEventModal" tabindex="-1" role="dialog" aria-labelledby="joinEventModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="joinEventModalLabel">Join Event</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <ul class="list-unstyled">
+                              <li><strong>Gym:</strong> {{ event['gym'] }}</li>
+                              <li><strong>Address:</strong> {{ event['address'] }}</li>
+                              <li><strong>Date:</strong> {{ event['readable_date'] }}</li>
+                            </ul>
+                            
+                            <form action="/events/boxer-join-event" method="POST" id="join-event-{{event['_id']['$oid']}}">
+                                <li class="list-unstyled"><strong>Rules:</strong> {{ event['rules'] }}</li>
+                                <li class="list-unstyled"><strong style="padding-right: 5px;">Agree to rules?</strong><input type="checkbox" required></li>
+                              <input type="hidden" value="{{event['_id']['$oid']}}" name="event_id">
+                            </form>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" form="join-event-{{event['_id']['$oid']}}">Join</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>                 
+                    {% elif role == None%}
+                      <a href="/login" class="btn btn-primary">Log In or Sign Up to join events</a>
+                    {% endif %}
                   </div>
                 </div>
               </div>

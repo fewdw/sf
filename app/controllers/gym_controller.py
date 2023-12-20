@@ -36,7 +36,7 @@ def add_gym():
         return redirect('/my-gyms')
     
     imageconverter = ImageConverter()
-    encoded_pic = imageconverter.convert_image_to_base_64(picture)
+    encoded_pic = imageconverter.convert_image_to_base64(picture)
 
     # create gym object
     gym = Gym(session.get('username'),name,phone,address,language,description,encoded_pic)
@@ -44,7 +44,7 @@ def add_gym():
 
     # add it to the database
     if not gym_database.add_new_gym(gym.to_dict()):
-        flash('There was an error creating your gym, you can only manage a maximum of 3 gyms.')
+        flash('There was an error creating your gym, you can only manage a maximum of 2 gyms.')
         return redirect('/my-gyms')        
 
     # redirect to gym

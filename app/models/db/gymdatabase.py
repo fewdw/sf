@@ -3,6 +3,9 @@ import certifi
 import json
 from bson import json_util
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 ca = certifi.where()
 
 class GymDatabase:
@@ -27,7 +30,7 @@ class GymDatabase:
             return False
         
         coach = self.coach_profile_collection.find_one({"username": gym['username']})
-        if len(coach["gyms"]) == 3:
+        if len(coach["gyms"]) == 2:
             return False
 
         # create gym

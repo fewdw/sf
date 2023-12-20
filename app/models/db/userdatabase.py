@@ -2,8 +2,10 @@ from pymongo import MongoClient
 import certifi
 import json
 from bson import json_util
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 ca = certifi.where()
 
 class UserDatabase:

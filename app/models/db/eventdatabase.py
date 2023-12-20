@@ -4,6 +4,9 @@ import json
 from bson import json_util
 from datetime import datetime
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 ca = certifi.where()
 
 class EventDatabase:

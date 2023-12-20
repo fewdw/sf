@@ -1,15 +1,15 @@
-from flask import render_template,session,redirect, request, flash, get_flashed_messages
+from flask import render_template, session, redirect, request, flash, get_flashed_messages
 from app import app
 from app.models.datetimechecker import DateTimeChecker
 from app.models.db.eventdatabase import EventDatabase
 from app.models.db.gymdatabase import GymDatabase
 from app.models.event import Event
 
+
 @app.route('/my-events')
 def my_events():
-    
     if session.get('role') == "Boxer":
-        return render_template("boxer/my-events.html",role = session.get('role')) 
+        return render_template("boxer/my-events.html", role=session.get('role'))
     if session.get('role') == "Coach":
         # get all gyms for a user, retrieve name only
         gymdatabase = GymDatabase()
@@ -23,7 +23,7 @@ def my_events():
         # get all events from user
         eventdatabase = EventDatabase()
         events = eventdatabase.get_all_events_from_user(session.get('username'))
-        
+
         # classify list of events
         datetimechecker = DateTimeChecker()
 
@@ -33,17 +33,17 @@ def my_events():
             else:
                 past_events.append(event)
 
-        return render_template("coach/my-events.html",role = session.get('role'),messages = messages, gyms=gyms, future_events = future_events, past_events = past_events)
+        return render_template("coach/my-events.html", role=session.get('role'), messages=messages, gyms=gyms,
+                               future_events=future_events, past_events=past_events)
     return redirect('/')
-    
-    
+
+
 @app.route('/add-new-event', methods=['POST'])
 def add_event():
-
     # validate session
     if not session.get('role') == "Coach":
         return redirect('/')
-    
+
     # get gym, date and rules
     gym = request.form.get('gym')
     date = request.form.get('date')
@@ -59,14 +59,14 @@ def add_event():
     if gym is None:
         flash("Failed to add a an event, please select a gym.")
         return redirect('/my-events')
-    
+
     datetimechecker = DateTimeChecker()
     if not datetimechecker.is_date_later_than_current_time(date):
         flash("Please select a later time for the event.")
         return redirect('/my-events')
-    
+
     readable_date = datetimechecker.date_to_readable_format(date)
-    
+
     # get gym language and image
     gymdatabase = GymDatabase()
 
@@ -90,7 +90,6 @@ def add_event():
     # add the event to db
     eventdatabase = EventDatabase()
     eventdatabase.add_event(event.to_dict())
-    
 
     # redirect to events
     return redirect('/my-events')
@@ -98,18 +97,21 @@ def add_event():
 
 @app.route('/events')
 def view_events():
-
     # get all events
     eventdatabase = EventDatabase()
     events = eventdatabase.get_all_future_events()
 
-    return render_template('events/events.html',role=session.get('role'), events=events, username=session.get('username'))
+    return render_template('events/events.html', role=session.get('role'), events=events,
+                           username=session.get('username'))
 
-@app.route('/events/boxer-join-event')
+
+@app.route('/events/boxer-join-event', methods=['POST'])
 def boxer_join_event_route():
-
     # get event id
-    event_id = request.args.get('event_id')
-    return event_id
-    # add boxer to the event waiting list
-    # redirect
+
+    # get user id
+    user = session.get('username')
+    # add user id to event id
+    event_id = request.form.get('event_id')
+    return [user,event_id]
+

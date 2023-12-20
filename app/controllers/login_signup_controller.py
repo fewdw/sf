@@ -9,21 +9,21 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# LOGIN ROUTES
-@app.route('/login', methods = ['GET'])
-def login_page():
 
+# LOGIN ROUTES
+@app.route('/login', methods=['GET'])
+def login_page():
     if session.get('username') is not None:
         return redirect('/')
     message = get_flashed_messages()
-    return render_template('/login_signup/login.html',message=message)
+    return render_template('/login_signup/login.html', message=message)
 
-@app.route('/login', methods = ['POST'])
+
+@app.route('/login', methods=['POST'])
 def login_page_verify():
-    
     if session.get('username') is not None:
         return redirect('/')
-    
+
     username = request.form.get('username')
     password = request.form.get('password')
 
@@ -39,15 +39,15 @@ def login_page_verify():
     if not user_db.does_username_exist(username):
         flash('username does not exist')
         return redirect('/login')
-    
+
     # get user information by username
     user = user_db.get_user_info_by_username(username)
-    
+
     # check if password is correct
     if not bcrypt.checkpw(password.encode('utf-8'), user["password"].encode('utf-8')):
         flash('wrong password')
         return redirect('/login')
-    
+
     # create session
     session['username'] = user['username']
     session['language'] = user['language']
@@ -55,21 +55,20 @@ def login_page_verify():
 
     # redirect home page
     return redirect('/')
-    
+
 
 # SIGNUP ROUTES
-@app.route('/signup',methods = ['GET'])
+@app.route('/signup', methods=['GET'])
 def signup_page():
-    
     if session.get('username') is not None:
         return redirect('/')
-    
+
     message = get_flashed_messages()
     return render_template('/login_signup/signup.html', message=message)
 
-@app.route('/signup',methods = ['POST'])
-def signup_page_verify():
 
+@app.route('/signup', methods=['POST'])
+def signup_page_verify():
     if session.get('username') is not None:
         return redirect('/')
 
@@ -88,15 +87,15 @@ def signup_page_verify():
         return redirect('/signup')
 
     # make sure role is boxer or coach
-    if role not in ['Boxer','Coach']:
+    if role not in ['Boxer', 'Coach']:
         flash('User has to be Boxer or Coach')
         return redirect('/signup')
-    
+
     # make sure language is french or english
-    if language not in ['English','French']:
+    if language not in ['English', 'French']:
         flash('Language has to be English or French')
         return redirect('/signup')
-    
+
     # make sure username is not taken
     if user_db.does_username_exist(username):
         flash('Username already exists')
@@ -106,11 +105,11 @@ def signup_page_verify():
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode()
 
     # create new user model
-    new_user = User(username,hashed_password,role,language)
+    new_user = User(username, hashed_password, role, language)
 
     # add new user to the DB
     user_db.signup_new_user(new_user.to_dict())
-    
+
     # create session and redirect to main page
     session['username'] = username
     session['language'] = language

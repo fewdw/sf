@@ -45,7 +45,7 @@ def update_boxer_profile():
     if not picture:
         encoded_pic = request.form.get("picture_base64")
     else:
-        encoded_pic = imageconverter.convert_image_to_base_64(picture)
+        encoded_pic = imageconverter.convert_image_to_base64(picture)
 
     new_boxer_profile = BoxerProfile(
         session.get('username'),

@@ -41,3 +41,4 @@ class EventDatabase:
         query = {"date": {"$gt": current_time}}
         events = self.event_collection.find(query)
         return json.loads(json_util.dumps(events))
+

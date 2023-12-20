@@ -108,10 +108,9 @@ def view_events():
 @app.route('/events/boxer-join-event', methods=['POST'])
 def boxer_join_event_route():
     # get event id
-
+    event_id = request.form.get('event_id')
     # get user id
     user = session.get('username')
     # add user id to event id
-    event_id = request.form.get('event_id')
-    return [user,event_id]
+
 

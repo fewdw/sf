@@ -110,7 +110,12 @@ def boxer_join_event_route():
     # get event id
     event_id = request.form.get('event_id')
     # get user id
-    user = session.get('username')
-    # add user id to event id
+    username = session.get('username')
+    # add user to wait list
+    eventdatabase = EventDatabase()
+    eventdatabase.add_user_to_waitlist(event_id,username)
+    return redirect('/events')
+
+
 
 

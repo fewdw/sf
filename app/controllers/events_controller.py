@@ -9,7 +9,10 @@ from app.models.event import Event
 @app.route('/my-events')
 def my_events():
     if session.get('role') == "Boxer":
+        # add logic here
+
         return render_template("boxer/my-events.html", role=session.get('role'))
+
     if session.get('role') == "Coach":
         # get all gyms for a user, retrieve name only
         gymdatabase = GymDatabase()
@@ -99,9 +102,16 @@ def add_event():
 def view_events():
     # get all events
     eventdatabase = EventDatabase()
-    events = eventdatabase.get_all_future_events()
 
-    return render_template('events/events.html', role=session.get('role'), events=events,
+    session_role = session.get('role')
+    username = session.get("username")
+
+    if session_role != 'Boxer':
+        events = eventdatabase.get_all_future_events()
+    else:
+        events = eventdatabase.get_future_events_without_username(username)
+
+    return render_template('events/events.html', role=session_role, events=events,
                            username=session.get('username'))
 
 

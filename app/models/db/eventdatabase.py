@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 import certifi
 import json
-from bson import json_util
+from bson import json_util, ObjectId
 from datetime import datetime
 import os
 from dotenv import load_dotenv
@@ -41,5 +41,14 @@ class EventDatabase:
         return json.loads(json_util.dumps(events))
 
     def add_user_to_waitlist(self, event_id, username):
-        self.event_collection.update({'_id': event_id}, {'$push': {"waiting_list":username}})
-wroibgho[irwegbn]
+        self.event_collection.update_one({'_id': ObjectId(event_id)}, {'$push': {"waiting_list": username}})
+
+    def get_future_events_without_username(self, username):
+        current_time = datetime.now().strftime("%Y-%m-%dT%H:%M")
+        query = {
+            "date": {"$gt": current_time},
+            "waiting_list": {"$nin": [username]}
+        }
+        events = self.event_collection.find(query)
+        return json.loads(json_util.dumps(events))
+

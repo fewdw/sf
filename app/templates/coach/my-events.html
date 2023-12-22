@@ -9,144 +9,129 @@
    <body>
       {% include 'main_page/navbars/coach-navbar.html' %}
       <div class="container mt-4">
-
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link active" id="future-events-tab" data-toggle="tab" href="#future-events" role="tab" aria-controls="future-events" aria-selected="true">Future Events</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="past-events-tab" data-toggle="tab" href="#past-events" role="tab" aria-controls="past-events" aria-selected="false">Past Events</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="create-event-tab" data-toggle="tab" href="#create-event" role="tab" aria-controls="create-event" aria-selected="false">Create Event</a>
-          </li>
-        </ul>
-        <!-- Tab panes -->
-        <div class="tab-content" id="myTabContent">
-
-        <div class="tab-pane fade show active" id="future-events" role="tabpanel" aria-labelledby="future-events-tab">
-          <div class="row">
-            {%for event in future_events%}
-            <!--LOOP START HERE FOR EVENT CARD-->
-            <div class="col-md-4" style="padding-top: 10px;">
-              <div class="card">
-                <img src="data:image/png;base64,{{event['picture']}}" class="card-img-top" alt="Gym Image">
-                <div class="card-body">
-                  <h5 class="card-title">{{event['gym']}}</h5>
-                  <p class="card-subtitle mb-2 text-muted">{{event['address']}}</p>
-                  <p class="card-text">{{event['readable_date']}}</p>
-                  <p class="card-text">{{event['rules']}}</p>
-                  <p class="card-text">People mostly speak {{event['language']}}</p>
-                  <p class="card-text">
-
-                  {% if event['max_attendees'] > 0 %}
-                      {% set percentage = (event['boxers']|length / event['max_attendees']) * 100 %}
-                      {% set aria_valuenow = event['boxers']|length %}
-                      {% set aria_valuemin = 0 %}
-                      {% set aria_valuemax = event['max_attendees'] %}
-                  {% else %}
-                      {% set percentage = 0 %}
-                      {% set aria_valuenow = 0 %}
-                      {% set aria_valuemin = 0 %}
-                      {% set aria_valuemax = 0 %}
-                  {% endif %}
-                  <div class="progress">
-                      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{ aria_valuenow }}" aria-valuemin="{{ aria_valuemin }}" aria-valuemax="{{ aria_valuemax }}" style="width: {{ percentage }}%">
-                          {{ percentage }}%
-                      </div>
-                  </div>
-
-                  </p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <a href="" class="btn btn-primary">{{event['waiting_list']|length}} people waiting</a>
-                    <a href="" class="btn btn-danger">Delete</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!--LOOP END HERE-->
-            {%endfor%}
-
-          </div>
-        </div>
-          <div class="tab-pane fade" id="past-events" role="tabpanel" aria-labelledby="past-events-tab">
-
-            <div class="row">
-              {%for event in past_events%}
-              <!--LOOP START HERE FOR EVENT CARD-->
-              <div class="col-md-4" style="padding-top: 10px;">
-                <div class="card">
-                  <img src="data:image/png;base64,{{event['picture']}}" class="card-img-top" alt="Gym Image">
-                  <div class="card-body">
-                    <h5 class="card-title">{{event['gym']}}</h5>
-                    <p class="card-text">{{event['readable_date']}}</p>
-                    <p class="card-text">{{event['boxers']|length}} boxers attended this event</p>
-                  </div>
-                </div>
-              </div>
-              <!--LOOP END HERE-->
-              {%endfor%}
-  
-            </div>
-
-          </div>
-          <div class="tab-pane fade" id="create-event" role="tabpanel" aria-labelledby="create-event-tab">
-            <!--FORM TO CREATE EVENT HERE-->
-            <div class="container">
-                <form method="post" action="/add-new-event">
-                    <div class="form-group">
-                      <label for="dropdown">Gym:</label>
-                      <select class="form-control" id="dropdown" name="gym" required>
-                        <option selected disabled>Select A gym</option>
-                      {%for gym in gyms%}
-                        <option value="{{gym}}">{{gym}}</option>
-                      {%endfor%}
-                    </select>
-                    </div>
-
-                    <div class="form-group">
-                      <label for="datetimepicker">Select date and time:</label>
-                      <div class="input-group date" id="datetimepicker" data-target-input="nearest">
-                        <input type="datetime-local" class="form-control datetimepicker-input" data-target="#datetimepicker" name="date">
-                        <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
-                          <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+         <!-- Nav tabs -->
+         <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+               <a class="nav-link active" id="future-events-tab" data-toggle="tab" href="#future-events" role="tab" aria-controls="future-events" aria-selected="true">Future Events</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" id="past-events-tab" data-toggle="tab" href="#past-events" role="tab" aria-controls="past-events" aria-selected="false">Past Events</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" id="create-event-tab" data-toggle="tab" href="#create-event" role="tab" aria-controls="create-event" aria-selected="false">Create Event</a>
+            </li>
+         </ul>
+         <!-- Tab panes -->
+         <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="future-events" role="tabpanel" aria-labelledby="future-events-tab">
+               <div class="row">
+                  {%for event in future_events%}
+                  <!--LOOP START HERE FOR EVENT CARD-->
+                  <div class="col-md-4" style="padding-top: 10px;">
+                     <div class="card">
+                        <img src="data:image/png;base64,{{event['picture']}}" class="card-img-top" alt="Gym Image">
+                        <div class="card-body">
+                           <h5 class="card-title">{{event['gym']}}</h5>
+                           <p class="card-subtitle mb-2 text-muted">{{event['address']}}</p>
+                           <p class="card-text">{{event['readable_date']}}</p>
+                           <p class="card-text">{{event['rules']}}</p>
+                           <p class="card-text">People mostly speak {{event['language']}}</p>
+                           <p class="card-text">
+                              {% if event['max_attendees'] > 0 %}
+                              {% set percentage = (event['boxers']|length / event['max_attendees']) * 100 %}
+                              {% set aria_valuenow = event['boxers']|length %}
+                              {% set aria_valuemin = 0 %}
+                              {% set aria_valuemax = event['max_attendees'] %}
+                              {% else %}
+                              {% set percentage = 0 %}
+                              {% set aria_valuenow = 0 %}
+                              {% set aria_valuemin = 0 %}
+                              {% set aria_valuemax = 0 %}
+                              {% endif %}
+                           <div class="progress">
+                              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{ aria_valuenow }}" aria-valuemin="{{ aria_valuemin }}" aria-valuemax="{{ aria_valuemax }}" style="width: {{ percentage }}%">
+                                 {{ percentage }}%
+                              </div>
+                           </div>
+                           </p>
+                           <div class="d-flex justify-content-between align-items-center">
+                              <a href="" class="btn btn-primary">{{event['waiting_list']|length}} people waiting</a>
+                              <a href="" class="btn btn-danger">Delete</a>
+                           </div>
                         </div>
-                      </div>
-                    </div>
-
-                    <div class="form-group">
-                      <label for="slider">Max Attendees: <span id="slider-value">10</span></label>
-                      <input type="range" class="form-control-range" id="slider" min="2" value="10" max="15" name="max_attendees">
-                    </div>               
-
-                    <div class="form-group">
-                      <label for="rules">Rules:</label>
-                      <textarea class="form-control" id="rules" rows="5" name="rules" placeholder="Specify any extra rules boxers should now about" required minlength="5"></textarea>
-                      <label for="usegymrules">Use Gym Rules? <input type="checkbox" id="usegymrules"></label>
-                    </div>
-
-                    <button type="Submit" class="btn btn-primary">Submit</button>
+                     </div>
+                  </div>
+                  <!--LOOP END HERE-->
+                  {%endfor%}
+               </div>
+            </div>
+            <div class="tab-pane fade" id="past-events" role="tabpanel" aria-labelledby="past-events-tab">
+               <div class="row">
+                  {%for event in past_events%}
+                  <!--LOOP START HERE FOR EVENT CARD-->
+                  <div class="col-md-4" style="padding-top: 10px;">
+                     <div class="card">
+                        <img src="data:image/png;base64,{{event['picture']}}" class="card-img-top" alt="Gym Image">
+                        <div class="card-body">
+                           <h5 class="card-title">{{event['gym']}}</h5>
+                           <p class="card-text">{{event['readable_date']}}</p>
+                           <p class="card-text">{{event['boxers']|length}} boxers attended this event</p>
+                        </div>
+                     </div>
+                  </div>
+                  <!--LOOP END HERE-->
+                  {%endfor%}
+               </div>
+            </div>
+            <div class="tab-pane fade" id="create-event" role="tabpanel" aria-labelledby="create-event-tab">
+               <!--FORM TO CREATE EVENT HERE-->
+               <div class="container">
+                  <form method="post" action="/add-new-event">
+                     <div class="form-group">
+                        <label for="dropdown">Gym:</label>
+                        <select class="form-control" id="dropdown" name="gym" required>
+                           <option selected disabled>Select A gym</option>
+                           {%for gym in gyms%}
+                           <option value="{{gym}}">{{gym}}</option>
+                           {%endfor%}
+                        </select>
+                     </div>
+                     <div class="form-group">
+                        <label for="datetimepicker">Select date and time:</label>
+                        <div class="input-group date" id="datetimepicker" data-target-input="nearest">
+                           <input type="datetime-local" class="form-control datetimepicker-input" data-target="#datetimepicker" name="date">
+                           <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
+                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="form-group">
+                        <label for="slider">Max Attendees: <span id="slider-value">10</span></label>
+                        <input type="range" class="form-control-range" id="slider" min="2" value="10" max="15" name="max_attendees">
+                     </div>
+                     <div class="form-group">
+                        <label for="rules">Rules:</label>
+                        <textarea class="form-control" id="rules" rows="5" name="rules" placeholder="Specify any extra rules boxers should now about" required minlength="5"></textarea>
+                        <label for="usegymrules">Use Gym Rules? <input type="checkbox" id="usegymrules"></label>
+                     </div>
+                     <button type="Submit" class="btn btn-primary">Submit</button>
                   </form>
-              </div>              
-            <!---->
-          </div>
-        </div>
+               </div>
+               <!---->
+            </div>
+         </div>
       </div>
-
       <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
       <script src="static/scripts/gymrulescript.js"></script>
-
       <script>
-        $(document).ready(function() {
-          $('#slider').on('input', function() {
-            var value = $(this).val();
-            $('#slider-value').text(value);
-          });
-        });
-        </script>
-
+         $(document).ready(function() {
+           $('#slider').on('input', function() {
+             var value = $(this).val();
+             $('#slider-value').text(value);
+           });
+         });
+      </script>
    </body>
 </html>
